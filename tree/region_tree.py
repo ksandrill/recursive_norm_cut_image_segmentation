@@ -18,20 +18,20 @@ class RegionTree:
                                                                vector_number=1)
         region1, region2 = split_image(node.region, eigen_vectors[0])
         self.split_counter += 1
-        print('split: ', self.split_counter)
+        #print('split: ', self.split_counter)
         node.children = RegionNode(region1), RegionNode(region2)
         if self.split_counter >= cuts_number:
             return
         for i in range(len(node.children)):
             if is_okay_to_split_region(node.children[i], min_region_size, color_tol=color_tol):
-                print(i + 1, ' child have size: ', node.children[i].get_region_size())
-                print(i + 1, ' child have color tolerance ', node.children[i].get_region_color_tolerance())
+                #print(i + 1, ' child have size: ', node.children[i].get_region_size())
+                #print(i + 1, ' child have color tolerance ', node.children[i].get_region_color_tolerance())
                 if self.split_counter < cuts_number:
                     self._split(node.children[i], min_region_size, color_tol, cuts_number=cuts_number)
 
     def make_tree(self, img: np.ndarray, min_region_size: int, color_tol: int, cuts_number: int) -> None:
         self.root = RegionNode(img)
-        print('make root')
+        #print('make root')
         self._split(self.root, min_region_size, color_tol, cuts_number=cuts_number)
 
     def _extract_leaves_to_list(self, node: RegionNode, region_list: list[np.ndarray]) -> None:
