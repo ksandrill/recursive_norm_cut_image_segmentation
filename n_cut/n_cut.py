@@ -54,9 +54,22 @@ def get_eigen_vectors_from_second_smallest(image: np.ndarray, vector_number: int
 
 
 def split_image(image: np.ndarray, eigen_vector: np.ndarray):
+    split_point = np.mean(eigen_vector)
     mask = eigen_vector > np.mean(eigen_vector)
     mask = mask.reshape(image.shape)
-    return image * mask, image * ~mask
+    return image * mask, image * ~mask, split_point
+
+
+def calc_cut_cost(eigen_vector: np.ndarray, image_h: int, image_w: int, split_point: float,
+                  adjacency_matrix: np.ndarray, radius: float = 5):
+    n_cut_cost = 0.0
+    for i in range(len(eigen_vector)):
+        neighbors, _ = get_neighbors(i, radius, image_h, image_w)
+        for neighbor in neighbors:
+            if eigen_vector[neighbor] > split_point >= eigen_vector[i] or eigen_vector[neighbor] <= split_point < \
+                    eigen_vector[i]:
+                n_cut_cost += adjacency_matrix[i, neighbor]
+    return n_cut_cost / np.sum(adjacency_matrix)
 
 
 def main():
@@ -67,7 +80,7 @@ def main():
                                                            vector_number=vector_number)  # from second smallest
     for eigen_vector in eigen_vectors:
         plt.figure()
-        region1, region2 = split_image(image, eigen_vector)
+        region1, region2,_ = split_image(image, eigen_vector)
         plt.subplot(1, 2, 1)
         skimage.io.imshow(region1)
         plt.subplot(1, 2, 2)
