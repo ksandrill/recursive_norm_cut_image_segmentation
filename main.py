@@ -15,7 +15,7 @@ if __name__ == '__main__':
     image = cv2.imread(PATH_TO_IMAGE, 0)
     image = cv2.resize(image, INPUT_RESIZE_SHAPE)
     tree = RegionTree()
-    tree.make_tree(image, min_region_size=900, color_tol=50, cuts_number=4)
+    tree.make_tree(image, min_region_size=900, color_tol=50, cuts_number=5)
     regions = tree.extract_leaves_to_list()
     new_dir_name = os.path.basename(PATH_TO_IMAGE).split('.')[0]
     path_to_dir = os.path.join(PATH_TO_SAVE, new_dir_name)

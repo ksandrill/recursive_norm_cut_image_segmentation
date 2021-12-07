@@ -14,7 +14,4 @@ class RegionNode:
         return np.max(regionData) - np.min(regionData)
 
     def is_leaf(self) -> bool:
-        for child in self.children:
-            if child is not None:
-                return False
-        return True
+        return not any(self.children)
